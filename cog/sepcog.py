@@ -26,7 +26,7 @@ class SepCog(ABC):
         self.logger = logging.getLogger(f"red.sep-cogs.{self.__class__.__name__.lower()}")
         self.logger.setLevel(logging.INFO)
 
-        self._futures = []  # type: List[Coroutine]
+        self._futures: List[Coroutine] = []
         self._add_future(self._init_cache())
 
     @abstractmethod
