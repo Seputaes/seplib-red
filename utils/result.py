@@ -1,4 +1,4 @@
-from typing import NamedTuple, Optional, Callable
+from typing import Callable, NamedTuple, Optional
 
 
 class Result(NamedTuple):

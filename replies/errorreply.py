@@ -8,6 +8,4 @@ class ErrorReply(EmbedReply):
     """
 
     def __init__(self, message: str):
-        super(ErrorReply, self).__init__(
-            message=message, color=HexColor.error(), emoji="\N{CROSS MARK}"
-        )
+        super(ErrorReply, self).__init__(message=message, color=HexColor.error(), emoji="\N{CROSS MARK}")

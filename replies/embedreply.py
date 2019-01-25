@@ -1,4 +1,4 @@
-from typing import Union, Optional
+from typing import Optional, Union
 
 import discord
 
@@ -11,9 +11,7 @@ class EmbedReply(object):
     This can be easily subclassed to customize its attributes.
     """
 
-    def __init__(
-        self, message: str, color: Union[HexColor, discord.Colour], emoji: Optional[str] = None
-    ):
+    def __init__(self, message: str, color: Union[HexColor, discord.Colour], emoji: Optional[str] = None):
         self.message = message
         self.color = color
         self.emoji = emoji

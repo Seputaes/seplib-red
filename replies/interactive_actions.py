@@ -6,7 +6,7 @@ import discord
 
 from redbot.core.commands import Context
 from redbot.core.utils.menus import start_adding_reactions
-from redbot.core.utils.predicates import ReactionPredicate, MessagePredicate
+from redbot.core.utils.predicates import MessagePredicate, ReactionPredicate
 
 
 class InteractiveActions(object):
@@ -19,9 +19,7 @@ class InteractiveActions(object):
     OurReactionPredicate.YES_OR_NO_EMOJIS = YES_OR_NO_EMOJIS
 
     @staticmethod
-    async def yes_or_no_action(
-        ctx: Context, message: str = None, embed: discord.Embed = None, timeout=30
-    ) -> bool:
+    async def yes_or_no_action(ctx: Context, message: str = None, embed: discord.Embed = None, timeout=30) -> bool:
 
         # We need either a message or an embed object, but not both
         if (message is None and embed is None) or (message is not None and embed is not None):
@@ -39,12 +37,8 @@ class InteractiveActions(object):
 
         confirm_message = await ctx.send(content=message, embed=embed)
         if can_react:
-            start_adding_reactions(
-                confirm_message, InteractiveActions.YES_OR_NO_EMOJIS, ctx.bot.loop
-            )
-            predicate = InteractiveActions.OurReactionPredicate.yes_or_no(
-                confirm_message, ctx.author
-            )
+            start_adding_reactions(confirm_message, InteractiveActions.YES_OR_NO_EMOJIS, ctx.bot.loop)
+            predicate = InteractiveActions.OurReactionPredicate.yes_or_no(confirm_message, ctx.author)
             event = "reaction_add"
         else:
             predicate = MessagePredicate.yes_or_no(ctx)
