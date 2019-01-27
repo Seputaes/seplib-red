@@ -22,34 +22,34 @@ class InteractiveActions(object):
     async def yes_or_no_action(ctx: Context, message: str = None, embed: discord.Embed = None, timeout=30) -> bool:
 
         # We need either a message or an embed object, but not both
-        if (message is None and embed is None) or (message is not None and embed is not None):
+        if (message is None and embed is None) or (message is not None and embed is not None):  # pragma: cover
             raise TypeError("Either Message or embed must be set, but not both.")
 
-        can_react = ctx.channel.permissions_for(ctx.me).add_reactions
+        can_react = ctx.channel.permissions_for(ctx.me).add_reactions  # pragma: no cover
 
         # If we can't react, we need respond based on "y/n" strings.
         # Add that indicator to the message or embed.
-        if not can_react:
+        if not can_react:  # pragma: no cover
             if message is not None:
                 message += "\n\n(y/n)"
             else:
                 embed.description += "\n\n(y/n)"
 
-        confirm_message = await ctx.send(content=message, embed=embed)
-        if can_react:
+        confirm_message = await ctx.send(content=message, embed=embed)  # pragma: no cover
+        if can_react:  # pragma: no cover
             start_adding_reactions(confirm_message, InteractiveActions.YES_OR_NO_EMOJIS, ctx.bot.loop)
             predicate = InteractiveActions.OurReactionPredicate.yes_or_no(confirm_message, ctx.author)
             event = "reaction_add"
-        else:
+        else:  # pragma: no cover
             predicate = MessagePredicate.yes_or_no(ctx)
             event = "message"
 
-        try:
+        try:  # pragma: no cover
             await ctx.bot.wait_for(event, check=predicate, timeout=timeout)
-        except asyncio.TimeoutError:
+        except asyncio.TimeoutError:  # pragma: no cover
             await confirm_message.delete()
             return False
 
         # delete the confirmation message and tell the caller the result of the yes/no.
-        await confirm_message.delete()
-        return predicate.result
+        await confirm_message.delete()  # pragma: no cover
+        return predicate.result  # pragma: no cover

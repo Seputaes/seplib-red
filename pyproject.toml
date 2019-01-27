@@ -40,6 +40,7 @@ toml = "*"
 black = "18.9b0"
 pytest = "*"
 pytest-asyncio = "*"
+pytest-cov = "*"
 
 [build-system]
 requires = ["poetry>=0.12"]

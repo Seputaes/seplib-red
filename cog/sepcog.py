@@ -21,7 +21,7 @@ class SepCog(ABC):
     def __init__(self, bot: Red):
         self.bot = bot
 
-        self.config = self._setup_config()
+        self.config: Config = self._setup_config()
 
         self.logger = logging.getLogger(f"red.sep-cogs.{self.__class__.__name__.lower()}")
         self.logger.setLevel(logging.INFO)
