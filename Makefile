@@ -10,3 +10,5 @@ coverage:
 	pytest --cov=seplib ./tests --cov-report=html --cov-config tox.ini --cov-fail-under 95
 test-coverage:
 	pytest --cov seplib ./tests --cov-config tox.ini --cov-fail-under 95
+relative-imports:
+	./checks.sh
