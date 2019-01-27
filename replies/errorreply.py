@@ -1,5 +1,5 @@
-from cog_shared.seplib.replies.embedreply import EmbedReply
-from cog_shared.seplib.utils import HexColor
+from ..replies.embedreply import EmbedReply
+from ..utils import HexColor
 
 
 class ErrorReply(EmbedReply):

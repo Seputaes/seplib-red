@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 import discord
 
-from cog_shared.seplib.utils import HexColor
+from ..utils import HexColor
 
 
 class EmbedReply(object):
