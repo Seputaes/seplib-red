@@ -1,7 +1,14 @@
 import asyncio
 from types import FunctionType
 
-from typing import Coroutine
+from typing import Coroutine, Tuple, Dict
+
+
+def simple_return_function(return_value: object):
+    def fake_function(*args, **kwargs):
+        return return_value
+
+    return fake_function
 
 
 def simple_coroutine(name: str) -> Coroutine:
@@ -50,6 +57,16 @@ def coroutine_return_args() -> FunctionType:
         return {"args": coargs, "kwargs": cokwargs}
 
     return coroutine
+
+
+def coroutine_return_modified_args() -> Tuple[Dict, FunctionType]:
+    return_dict = {}
+
+    async def coroutine(*coargs, **cokwargs):
+        return_dict.update({"args": coargs, "kwargs": cokwargs})
+        return return_dict
+
+    return return_dict, coroutine
 
 
 def coroutine_exception(exception: BaseException) -> FunctionType:

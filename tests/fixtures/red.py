@@ -1,13 +1,13 @@
 import hashlib
 
 import pytest
-from discord.abc import Messageable
 
 from redbot.core.drivers.red_base import BaseDriver
 
 from redbot.core import Config
 
 from redbot.core.bot import Red
+from seplib.tests.utils.strings import random_string
 
 __all__ = [
     "red_bot",
@@ -17,6 +17,8 @@ __all__ = [
     "discord_message",
     "discord_connection",
     "discord_messageable",
+    "discord_dm_channel",
+    "message_predicate",
 ]
 
 
@@ -50,6 +52,9 @@ def discord_connection():
     class ConnectionState(object):
         http = None
 
+        def store_user(self, *author):
+            return author
+
     return ConnectionState()
 
 
@@ -68,11 +73,27 @@ def discord_messageable():
 def discord_message(discord_messageable, discord_connection):
     from discord import Message
 
-    return Message(channel=discord_messageable, data={"id": 1}, state=discord_connection)
+    return Message(channel=discord_messageable, data={"id": 1, "author": "foo"}, state=discord_connection)
 
 
 @pytest.fixture()
-def red_context(discord_message):
+def discord_dm_channel(discord_connection):
+    from discord import DMChannel
+
+    return DMChannel(data={"id": 1, "recipients": [None]}, state=discord_connection, me=None)
+
+
+@pytest.fixture()
+def red_context(discord_message, red_bot):
     from redbot.core.commands import Context
 
-    return Context(prefix="!", message=discord_message)
+    return Context(prefix="!", message=discord_message, bot=red_bot)
+
+
+@pytest.fixture()
+def message_predicate():
+    from redbot.core.utils.predicates import MessagePredicate
+
+    p = MessagePredicate(predicate=None)
+    p.result = random_string()
+    return p

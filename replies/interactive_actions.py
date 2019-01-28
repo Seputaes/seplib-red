@@ -1,8 +1,9 @@
 import asyncio
 import copy
-from typing import ClassVar, Tuple
+from typing import ClassVar, Tuple, List
 
 import discord
+from redbot.core.bot import Red
 
 from redbot.core.commands import Context
 from redbot.core.utils.menus import start_adding_reactions
@@ -53,3 +54,25 @@ class InteractiveActions(object):
         # delete the confirmation message and tell the caller the result of the yes/no.
         await confirm_message.delete()  # pragma: no cover
         return predicate.result  # pragma: no cover
+
+    @staticmethod
+    async def wait_for_author_choice(ctx: Context, valid_choices: List[str], timeout: int = 30):
+
+        predicate = MessagePredicate.contained_in(ctx=ctx, user=ctx.author, collection=valid_choices)
+        try:
+            await ctx.bot.wait_for("message", check=predicate, timeout=timeout)
+        except asyncio.TimeoutError:
+            return predicate.result
+
+        return predicate.result
+
+    @staticmethod
+    async def wait_for_dm_choice(bot: Red, dm: discord.DMChannel, valid_choices: List[str], timeout: int = 30):
+
+        predicate = MessagePredicate.contained_in(channel=dm, ctx=None, user=dm.recipient, collection=valid_choices)
+        try:
+            await bot.wait_for("message", check=predicate, timeout=timeout)
+        except asyncio.TimeoutError:
+            return predicate.result
+
+        return predicate.result
