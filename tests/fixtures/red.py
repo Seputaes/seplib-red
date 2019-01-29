@@ -17,6 +17,10 @@ __all__ = [
     "discord_message",
     "discord_connection",
     "discord_messageable",
+    "discord_guild",
+    "discord_member",
+    "discord_user",
+    "discord_role",
     "discord_dm_channel",
     "message_predicate",
 ]
@@ -52,7 +56,7 @@ def discord_connection():
     class ConnectionState(object):
         http = None
 
-        def store_user(self, *author):
+        def store_user(self, author):
             return author
 
     return ConnectionState()
@@ -67,6 +71,35 @@ def discord_messageable():
             return self
 
     return M()
+
+
+@pytest.fixture()
+def discord_guild(discord_connection):
+    from discord import Guild
+
+    return Guild(data={"id": 1, "name": "FakeGuild"}, state=discord_connection)
+
+
+@pytest.fixture()
+def discord_role(discord_connection, discord_guild):
+    from discord import Role
+
+    return Role(data={"id": 1, "name": "FakeRole"}, guild=discord_guild, state=discord_connection)
+
+
+@pytest.fixture()
+def discord_user(discord_connection):
+    from discord import User
+
+    return User(data={"id": 1, "username": "FakeUser", "discriminator": "0001", "avatar": ""}, state=discord_connection)
+
+
+@pytest.fixture()
+def discord_member(discord_connection, discord_guild, discord_user):
+    from discord import Member
+
+    member = Member(data={"id": 1, "user": discord_user, "roles": []}, state=discord_connection, guild=discord_guild)
+    return member
 
 
 @pytest.fixture()
