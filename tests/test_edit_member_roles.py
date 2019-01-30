@@ -33,12 +33,11 @@ class TestEditMemberRoles(object):
         monkeypatch.setattr("discord.client.Client.wait_until_ready", coroutine_return(True))
         emr = EditMemberRoles(cog=sepcog_empty_cog)
         await emr.add_role(member=discord_member, role=discord_role)
+        assert len(emr._modifications) == 1
         modification = emr._modifications.get(key)
         assert modification is not None
-        assert len(modification.actions[True]) == 1
-        assert list(modification.actions[True])[0] is discord_role
-        assert len(modification.actions[False]) == 1
-        assert list(modification.actions[False])[0] is None
+        assert modification.actions[True] == {discord_role}
+        assert modification.actions[False] == {None}
 
     @pytest.mark.asyncio
     async def test_remove_role_appends_modifications(self, monkeypatch, sepcog_empty_cog, discord_member, discord_role):
@@ -46,10 +45,11 @@ class TestEditMemberRoles(object):
         monkeypatch.setattr("discord.client.Client.wait_until_ready", coroutine_return(True))
         emr = EditMemberRoles(cog=sepcog_empty_cog)
         await emr.remove_role(member=discord_member, role=discord_role)
+        assert len(emr._modifications) == 1
         modification = emr._modifications.get(key)
         assert modification is not None
         assert modification.member == discord_member
-        assert len(modification.actions[True]) == 0
+        assert modification.actions[True] == set()
         assert modification.actions[False] == {None, discord_role}
 
     @pytest.mark.asyncio
