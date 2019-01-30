@@ -14,7 +14,7 @@ def red_empty_cog(red_bot):
             self.bot = bot
 
     cog = RedCog(bot=red_bot)
-    cog.bot.cogs["EmptyCog"] = cog
+    cog.bot.cogs["RedCog"] = cog
     return cog
 
 
