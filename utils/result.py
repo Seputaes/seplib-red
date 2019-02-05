@@ -1,23 +1,13 @@
-from typing import Callable, NamedTuple, Optional
+from typing import Optional, Generic, TypeVar
+
+T = TypeVar("T")
 
 
-class Result(NamedTuple):
-    success: bool
-    error: Optional[str]
+class Result(Generic[T]):
+    def __init__(self, success: bool, value: Optional[T], error: Optional[str] = None):
+        self.success = success
+        self.value = value
+        self.error = error
 
-    @staticmethod
-    def get_result(check: Callable[[], bool], error: str) -> "Result":
-        """
-        Build an appropriate Result object using the supplied Callable method and error message.
-
-        The callable should return a type bool. If the result evaluates to false,
-        the message Result's error will be set to the supplied error. If it evaluates to true,
-        error will be set to none.
-
-        :param check: Callable which returns type bool.
-        :param error: Error message to be set to the result error if success is false.
-        :return: Built Result object.
-        """
-        if check():
-            return Result(success=True, error=None)
-        return Result(success=False, error=error)
+    def __repr__(self):
+        return f"Result(success={self.success}, value={self.value}, error={self.error})"
