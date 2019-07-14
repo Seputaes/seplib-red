@@ -4,13 +4,13 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Coroutine, List
 
-from redbot.core import Config
+from redbot.core import Config, commands
 from redbot.core.bot import Red
 
 __all__ = ["SepCog"]
 
 
-class SepCog(ABC):
+class SepCog(commands.Cog):
     """
     Base cog which provides common functionality between multiple different cogs, such as
     initializing config, defining logging, and and other utilities.
@@ -19,6 +19,7 @@ class SepCog(ABC):
     COG_CONFIG_SALT = "twitch.tv/seputaes"
 
     def __init__(self, bot: Red):
+        super(SepCog, self).__init__()
         self.bot = bot
 
         self.config: Config = self._setup_config()
